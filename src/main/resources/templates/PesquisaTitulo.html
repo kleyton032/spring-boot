@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="LayoutPadrao">
+<head>
+<title>Pesquisa de Título</title>
+</head>
+
+<section layout:fragment="conteudo">
+	<div layout:include="MensagemGeral"></div>
+
+
+	<div class="card">
+		<div class="card-header"> 
+		<strong>Pesquisa de Títulos</strong> 
+		<a class="fa fa-file-text link-card btn btn-success" aria-hidden="true" title="Novo Título" href="/titulos/novo"></a>
+		</div>
+		
+	<div class="table-responsive ">	
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th class="text-center">#</th>
+				<th class="text-center">Decrição</th>
+				<th class="text-center">Data de vencimento</th>
+				<th class="text-right">Valor</th>
+				<th class="text-center">Status</th>
+				<th class="text-center">Opções</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr th:each="titulo : ${titulos}">
+				<td class="text-center" th:text="${titulo.codigo}">1</td>
+				<td class="text-center" th:text="${titulo.descricao}"></td>
+				<td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+				<td class="text-right" th:text="|R$ ${{titulo.valor}}|"></td>
+				<td class="text-center"><span class="badge"
+					th:text="${titulo.status.descricao}"
+					th:classappend="${titulo.pendente ? 'badge-danger' : 'badge-success'}"></span>
+				</td>
+				<td class="text-center">
+				
+				<a class="fa fa-pencil-square-o fa-lg btn btn-outline-primary btn-sm" aria-hidden="true" 
+				title="Editar"
+				th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}"></a> 
+					
+				<a class="fa fa-times fa-lg btn btn-outline-secondary btn-sm" aria-hidden="true" data-toggle="modal" data-target="#confirmacaoExclusao"
+				th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}"
+				title="Excluir"></a>
+					</td>
+			</tr>
+			<tr>
+				<td colspan="6" th:if="${#lists.isEmpty(titulos)}">Nenhum título foi encontrado</td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+	<div layout:include="DialogoConfirmacaoExclusao"></div>
+</div>
+</section>
+</html>
